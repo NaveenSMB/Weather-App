@@ -1,6 +1,10 @@
 pipeline {
-    agent any
-
+    agent {
+        docker {
+            image 'node:18'
+            args '-u root:root -v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
     environment {
         DOCKERHUB_CREDS = credentials('dockerhub-cred')
         WEATHER_API_KEY = credentials('weather-api-key')
