@@ -1,30 +1,55 @@
-name: Build and Push to DockerHub
+name: Build & Push Weather App
 
 on:
   push:
-    branches:
-      - main  # or your deploy branch
+    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
-  docker:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      # 1. Checkout source code
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+      # 2. Setup Node.js environment
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
 
-    - name: Log in to DockerHub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+      # 3. Add Weather API key into .env file
+      - name: Create .env file for Vite
+        run: |
+          echo "VITE_WEATHER_API_KEY=${{ secrets.WEATHER_API_KEY }}" > .env
+          cat .env
 
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v5
-      with:
-        context: .
-        push: true
-        tags: naveensmb/weather-app:latest
+      # 4. Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # 5. Build the React app
+      - name: Build React App
+        run: npm run build
+
+      # 6. Set up Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # 7. Log in to Docker Hub using PAT token
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 8. Build & Push Docker image
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/weather-app:latest
