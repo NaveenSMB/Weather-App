@@ -1,6 +1,10 @@
 pipeline {
-    agent any
-
+      agent {
+        docker {
+            image 'node:18'
+            args '-u root:root'
+        }
+    }
     environment {
         // Load credentials
         DOCKERHUB_CREDS = credentials('dockerhub-cred')      // Jenkins ID for Docker Hub
