@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        DOCKERHUB_CREDS = credentials('dockerhub-token')
+        DOCKERHUB_CREDS = credentials('dockerhub-cred')
         WEATHER_API_KEY = credentials('weather-api-key')
         IMAGE_NAME = "naveensmb/weather-app"
     }
