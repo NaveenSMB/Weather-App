@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Load credentials
-        DOCKERHUB_CREDS = credentials('dockerhub-creds')      // Jenkins ID for Docker Hub
+        DOCKERHUB_CREDS = credentials('dockerhub-cred')      // Jenkins ID for Docker Hub
         WEATHER_API_KEY = credentials('weather-api-key')       // Jenkins ID for Weather API Key
         IMAGE_NAME = "your-dockerhub-username/weather-app"     // <-- Replace with your Docker repo name
     }
