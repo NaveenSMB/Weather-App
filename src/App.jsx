@@ -59,7 +59,7 @@ const WeatherDetails=({icon,temp,city,country,lat,long,humidity,wind})=>{
 // This is the main function
 
 function App() {
-let api_key = "2717d67b397c9c18e4db76b5f344a897";
+const api_key = import.meta.env.VITE_WEATHER_API_KEY;
 const [text, setText] = useState("Coimbatore");           // default in search bar this is aslo used while API call
 
 // these are for visuals
